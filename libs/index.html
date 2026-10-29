@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>OldGuys PC Checker 2.0</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+:root{--paper:#f2f1eb;--white:#fffefa;--ink:#1d211e;--muted:#777d74;--line:#dcded5;--lime:#c9f36a;--lime-dark:#719b23;--red:#c74737;--amber:#a86b16;--shadow:0 18px 55px #22251c0d;--mono:'DM Mono',Consolas,monospace;--sans:'Manrope','Segoe UI',sans-serif}
+*{box-sizing:border-box}html{background:var(--paper)}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.55 var(--sans);-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #90bc3c;outline-offset:3px}[hidden]{display:none!important}.mono{font-family:var(--mono)}
+/* Consent first: editorial, high-contrast layout */
+.gate{min-height:100vh;padding:28px;display:grid;place-items:center;background:var(--paper)}.gate-shell{width:min(1120px,100%);min-height:660px;display:grid;grid-template-columns:.8fr 1.2fr;background:var(--white);border:1px solid var(--line);box-shadow:var(--shadow);animation:rise .35s ease both}.gate-brand{background:var(--ink);color:var(--white);padding:38px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}.gate-brand:after{content:'OG';position:absolute;right:-28px;bottom:70px;font-size:clamp(150px,23vw,290px);line-height:1;font-weight:800;letter-spacing:-.13em;color:#ffffff08;pointer-events:none}.brand-top{display:flex;gap:12px;align-items:center;position:relative;z-index:1}.mark{display:grid;place-items:center;width:43px;height:43px;background:var(--lime);color:var(--ink);font-size:13px;font-weight:800;letter-spacing:-1px}.brand-name{font-weight:800;font-size:13px;line-height:1.2}.brand-name small{display:block;color:#9fa79b;font-size:10px;letter-spacing:1.8px;text-transform:uppercase;margin-top:5px}.brand-copy{position:relative;z-index:1}.kicker{font:11px var(--mono);letter-spacing:1px;text-transform:uppercase;color:var(--lime)}.brand-copy h1{font-size:clamp(36px,4vw,56px);line-height:1.04;letter-spacing:-2.7px;margin:15px 0 18px;max-width:380px}.brand-copy p{max-width:330px;color:#b5bcb1;font-size:13px}.brand-foot{position:relative;z-index:1;display:flex;justify-content:space-between;gap:10px;color:#8e968a;font:10px var(--mono);text-transform:uppercase;letter-spacing:.8px}.gate-content{padding:38px clamp(24px,4vw,54px);display:flex;flex-direction:column}.gate-content .kicker{color:var(--lime-dark)}.gate-content h2{font-size:25px;letter-spacing:-1px;margin:8px 0}.intro{color:var(--muted);font-size:12px;margin:0 0 22px;max-width:590px}.disclosure{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:17px 0;max-height:290px;overflow:auto}.disclosure h3{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;margin:0 0 11px}.disclosure p,.disclosure li{font-size:11px;color:#525950}.disclosure p{margin:0 0 10px}.disclosure ul{margin:7px 0 13px;padding-left:18px}.disclosure li{padding:3px 0}.note{display:flex;gap:11px;padding:12px 14px;background:#f5f7eb;border-left:3px solid var(--lime-dark);margin-top:16px;color:#545a4c;font-size:11px}.note strong{color:var(--ink)}.ack{display:flex;align-items:flex-start;gap:10px;margin:18px 0;color:#343a32;font-size:11px}.ack input{accent-color:var(--ink);width:16px;height:16px;flex:none;margin:1px 0 0}
+.username-section{display:grid;gap:7px;margin-top:17px}
+.username-section label{font-size:11px;font-weight:800;color:var(--ink)}
+.username-section input{width:100%;min-width:0;padding:11px 12px;background:#0d131b;border:1px solid #344153;color:#e7edf5;font-size:12px;border-radius:0}
+.username-section input::placeholder{color:#7f8da0}
+.username-section input:focus{border-color:var(--lime)}
+.username-section small{font-size:10px;color:var(--muted)}
+.ack{margin-top:15px}
+.gate-actions{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:14px;padding-top:8px}.gate-actions small{font-size:10px;color:var(--muted);max-width:220px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--ink);background:var(--ink);color:white;padding:11px 15px;font-size:11px;font-weight:800;letter-spacing:.2px;transition:transform .15s,background .15s}.btn:hover:not(:disabled){transform:translateY(-1px);background:#363d35}.btn.lime{background:var(--lime);color:var(--ink);border-color:var(--lime)}.btn.lime:hover:not(:disabled){background:#d6ff7e}.btn.outline{background:transparent;color:var(--ink);border-color:var(--line)}.btn:disabled{opacity:.4;cursor:not-allowed}.cancelled{text-align:center;margin:auto}.cancelled h2{font-size:28px}.cancelled p{color:var(--muted)}
+/* Desktop app shell */
+.app{min-height:100vh;display:grid;grid-template-columns:230px minmax(0,1fr)}.rail{background:var(--ink);color:var(--white);padding:25px 17px;display:flex;flex-direction:column;gap:34px;min-height:100vh}.rail-brand{display:flex;gap:11px;align-items:center;padding:0 7px}.rail-brand .mark{width:37px;height:37px}.rail-brand b{font-size:12px;line-height:1.25;display:block}.rail-brand small{display:block;color:#9fa79b;font:9px var(--mono);letter-spacing:1.1px;margin-top:4px}.nav-label{font:10px var(--mono);text-transform:uppercase;letter-spacing:1.3px;color:#7d857a;padding:0 10px;margin-bottom:8px}.nav{display:grid;gap:5px}.nav button{display:flex;align-items:center;gap:11px;border:1px solid transparent;background:transparent;color:#aeb5a9;text-align:left;padding:12px 10px;font-size:12px;font-weight:700}.nav button .num{font:10px var(--mono);width:19px;color:#727b6f}.nav button:hover{background:#292f28;color:white}.nav button.active{background:var(--lime);color:var(--ink)}.nav button.active .num{color:#596b35}.rail-bottom{margin-top:auto;border-top:1px solid #363d35;padding:17px 9px 0}.rail-bottom .label{font:10px var(--mono);color:#8c9588;text-transform:uppercase;letter-spacing:1px}.rail-bottom p{font-size:11px;color:#c2c8bd;margin:8px 0 0}.main{min-width:0;padding:28px clamp(20px,3.5vw,50px) 35px}.topline{display:flex;justify-content:space-between;align-items:center;gap:18px;padding-bottom:22px;border-bottom:1px solid var(--line)}.crumb{font:10px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:1.1px}.topline h1{font-size:30px;letter-spacing:-1.4px;margin:5px 0 0}.top-right{display:flex;align-items:center;gap:12px}.status-pill{display:flex;align-items:center;gap:8px;font-size:10px;color:var(--muted);border:1px solid var(--line);padding:8px 10px;background:#f8f8f2}.status-dot{width:7px;height:7px;border-radius:50%;background:#8d9689}.status-dot.live{background:#75a925;box-shadow:0 0 0 4px #c9f36a66}.page{display:none;animation:rise .25s ease both}.page.active{display:block}.section-intro{display:flex;justify-content:space-between;align-items:end;gap:20px;margin:27px 0 18px}.section-intro h2{font-size:17px;letter-spacing:-.5px;margin:0}.section-intro p{font-size:11px;color:var(--muted);margin:4px 0 0}.micro{font:10px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.8px}.hero{display:grid;grid-template-columns:1.4fr .8fr;gap:14px;margin:24px 0 20px}.hero-card{background:var(--lime);padding:25px 27px;min-height:205px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}.hero-card:after{content:'↗';position:absolute;right:14px;top:-30px;font-size:170px;line-height:1;font-weight:800;color:#20291b0c}.hero-card .kicker{color:#4f6e21}.hero-card h2{font-size:30px;line-height:1.08;letter-spacing:-1.5px;max-width:420px;margin:12px 0;position:relative;z-index:1}.hero-card p{font-size:11px;color:#4c593b;margin:0;max-width:400px}.hero-side{background:var(--ink);color:white;padding:24px;display:flex;flex-direction:column;justify-content:space-between}.hero-side .micro{color:#a2aa9d}.big-state{font-size:23px;letter-spacing:-.8px;font-weight:800;margin:15px 0 4px}.hero-side p{color:#aab2a4;font-size:11px;margin:0}.hero-side .state-line{display:flex;align-items:center;gap:8px;font:10px var(--mono);color:#d0d6c9;margin-top:25px}.state-line i{width:7px;height:7px;background:var(--lime);display:inline-block;border-radius:50%}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.stat{background:var(--white);border:1px solid var(--line);padding:17px 18px}.stat-head{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:10px}.stat-code{font:10px var(--mono);color:var(--lime-dark)}.stat-value{font-size:26px;font-weight:800;letter-spacing:-1px;margin:12px 0 1px}.stat-note{font-size:10px;color:var(--muted)}.content-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);gap:14px;margin-top:14px}.card{background:var(--white);border:1px solid var(--line);min-width:0}.card-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:17px 19px;border-bottom:1px solid var(--line)}.card-head h3{font-size:12px;margin:0}.card-head p{font-size:10px;color:var(--muted);margin:3px 0 0}.badge{font:9px var(--mono);padding:5px 7px;background:#eff0e8;color:#68705f;text-transform:uppercase;letter-spacing:.6px}.checks{padding:0 19px}.check{display:grid;grid-template-columns:32px minmax(0,1fr) auto;align-items:center;gap:11px;padding:14px 0;border-bottom:1px solid #e9eae2}.check:last-child{border-bottom:0}.check-icon{width:30px;height:30px;display:grid;place-items:center;background:#f0f2e8;font:12px var(--mono);color:#627d31}.check b{font-size:11px;display:block}.check small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.mini-tag{font:9px var(--mono);color:#7b8275;white-space:nowrap}.log{padding:17px 19px;display:grid;gap:15px;max-height:360px;overflow:auto}.log-item{display:grid;grid-template-columns:8px 1fr;gap:10px}.log-dot{width:6px;height:6px;background:#a8b09e;margin-top:5px}.log-item b{font-size:10px;display:block}.log-item p{font-size:10px;color:var(--muted);margin:3px 0 0;overflow-wrap:anywhere}.log-item time{display:block;font:9px var(--mono);color:#9aa092;margin-top:5px}.output{margin:18px 0 0;background:#20251f;color:#d7dfd0;border:1px solid #20251f}.output-head{padding:12px 15px;border-bottom:1px solid #394036;display:flex;justify-content:space-between;gap:10px;align-items:center}.output-head b{font-size:10px}.output-head span{font:9px var(--mono);color:#a7b29c}.output-body{font:10px/1.7 var(--mono);padding:15px;max-height:220px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;color:#c5d0bb}.output-body .muted-line{color:#7f8a78}.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;padding:14px 17px;border-bottom:1px solid var(--line)}.search{min-width:180px;flex:1;background:#f7f7f1;border:1px solid var(--line);padding:10px 12px;color:var(--ink);font-size:11px}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;text-align:left;min-width:540px}th{font:9px var(--mono);text-transform:uppercase;letter-spacing:.8px;color:#7a8175;background:#f5f5ee}th,td{padding:12px 15px;border-bottom:1px solid #e9eae2}td{font-size:11px;color:#4b5248}tr:last-child td{border-bottom:0}.empty{padding:30px;text-align:center;color:var(--muted);font-size:11px}.settings{padding:0 19px}.setting{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding:17px 0;border-bottom:1px solid #e9eae2}.setting:last-child{border:0}.setting b{font-size:11px}.setting p{font-size:10px;color:var(--muted);margin:4px 0 0;max-width:560px}.setting-right{min-width:180px;display:flex;gap:7px;align-items:center}.setting-right .search{min-width:0;width:100%}.footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:25px;padding-top:14px;border-top:1px solid var(--line);color:#8a9084;font:9px var(--mono);text-transform:uppercase;letter-spacing:.6px}.toast{position:fixed;right:22px;bottom:22px;max-width:420px;padding:13px 16px;background:var(--ink);color:white;border-left:4px solid var(--lime);font-size:11px;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);transition:.2s;pointer-events:none;z-index:10}.toast.show{opacity:1;transform:translateY(0)}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:1000px){.gate-shell{grid-template-columns:.7fr 1.3fr}.gate-brand{padding:28px}.hero{grid-template-columns:1fr}.hero-card{min-height:180px}.hero-side{min-height:145px}.content-grid{grid-template-columns:1fr}.app{grid-template-columns:190px minmax(0,1fr)}.main{padding:23px 22px}}
+@media(max-width:720px){.gate{padding:10px}.gate-shell{grid-template-columns:1fr}.gate-brand{min-height:230px;padding:24px}.brand-copy h1{font-size:36px}.brand-foot{margin-top:30px}.gate-content{padding:24px}.disclosure{max-height:250px}.gate-actions{align-items:stretch;flex-direction:column}.gate-actions .actions{width:100%}.gate-actions .btn{flex:1}.app{grid-template-columns:1fr}.rail{min-height:auto;padding:13px 14px;gap:13px}.rail-brand{padding:0 3px}.rail-bottom,.nav-label{display:none}.nav{grid-template-columns:repeat(3,minmax(0,1fr));gap:3px}.nav button{justify-content:center;flex-direction:column;gap:3px;padding:8px 3px;font-size:9px}.nav button .num{width:auto}.main{padding:18px 13px}.topline{align-items:flex-start;flex-direction:column}.topline h1{font-size:26px}.top-right{width:100%;justify-content:space-between}.hero-card{padding:21px}.hero-card h2{font-size:26px}.progress-summary{grid-template-columns:1fr;gap:12px}.hero-action{align-items:flex-start;flex-direction:column}.stats{grid-template-columns:1fr}.stat{padding:13px 15px}.stat-value{margin:6px 0 0}.setting{flex-direction:column}.setting-right{width:100%;min-width:0}.section-intro{align-items:flex-start;flex-direction:column}}
+
+/* Layout refinements: simplified Overview and full-width scan progress */
+.hero{grid-template-columns:minmax(0,1fr)}.hero-card{min-height:235px;padding:30px 32px}.hero-card h2{max-width:650px}.hero-card p{max-width:720px}.hero-action{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-top:25px;position:relative;z-index:1}.hero-state{display:flex;align-items:center;gap:9px;font:11px var(--mono);color:#3d4c2b}.hero-state .status-dot{background:#8b9a7d}.hero-state .status-dot.live{background:#719b23}.content-grid{grid-template-columns:minmax(0,1fr)}.progress-card .checks{padding-bottom:2px}.progress-summary{padding:17px 19px 6px;display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,.45fr);gap:22px;align-items:center}.progress-summary strong{font-size:12px}.progress-summary p{font-size:10px;color:var(--muted);margin:4px 0 0}.progress-track{height:8px;background:#e9ecdf;border-radius:99px;overflow:hidden}.progress-track span{display:block;height:100%;width:0;background:var(--lime-dark);border-radius:99px;transition:width .25s ease}.progress-track span.indeterminate{width:35%;animation:progress-slide 1.2s ease-in-out infinite alternate}.hero-card:after{right:30px;top:-18px}@keyframes progress-slide{from{transform:translateX(0)}to{transform:translateX(175%)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Unified dark mode */
+:root{color-scheme:dark;--paper:#0c1016;--white:#151b24;--ink:#e7edf5;--muted:#9aa7b7;--line:#2b3543;--lime:#b7f36a;--lime-dark:#a3dc53;--red:#ff786e;--amber:#f2bb66;--shadow:0 18px 55px #0008}
+html,body,.gate{background:#0c1016;color:#e7edf5}
+.gate-shell,.gate-content,.card,.stat,.hero-side,.rail,.main{background:#111720;color:#e7edf5}
+.gate-shell{border-color:#2b3543}.gate-brand{background:#090d13}.gate-content .kicker{color:#b7f36a}.intro,.disclosure p,.disclosure li,.section-intro p,.card-head p,.check small,.stat-note,.setting p{color:#9aa7b7}
+.disclosure,.topline,.card-head,.toolbar,.setting,.check{border-color:#2b3543}.note{background:#1b2720;border-left-color:#b7f36a;color:#c2d0c0}.note strong{color:#f2f6fa}.ack{color:#d5deea}.ack input{accent-color:#b7f36a}
+.nav button.active{background:#b7f36a;color:#111720}.nav button.active .num{color:#405822}.nav button:hover{background:#202a37;color:#fff}.status-pill,.search{background:#0d131b;border-color:#303b4b;color:#e7edf5}.status-dot{background:#647286}.status-dot.live{background:#b7f36a;box-shadow:0 0 0 4px #b7f36a22}
+.hero-card{background:#17251a;color:#e7edf5;border:1px solid #2f4932}.hero-card .kicker{color:#b7f36a}.hero-card p{color:#b7c8b4}.hero-state{color:#d9e6d2}.hero-side{background:#1a2330}.hero-side .micro,.hero-side p{color:#aab7c7}.hero-side .state-line{color:#dbe5ef}.hero-side .state-line i{background:#b7f36a}
+.stat,.card{border-color:#2b3543}.stat-code{color:#b7f36a}.badge{background:#202b38;color:#b9c7d7}.check-icon{background:#202b25;color:#b7f36a}.mini-tag{color:#a1adbd}.check{border-bottom-color:#27313d}.log-item p,.log-item time{color:#9aa7b7}.log-dot{background:#b7f36a}
+.progress-track{background:#2b3543}.progress-track span{background:#b7f36a}.output{background:#080d13;border-color:#293444}.output-head{border-color:#293444}.output-body{color:#d3e1cf}.output-body .muted-line{color:#82918a}
+th{background:#1b2430;color:#aab8c8}th,td{border-color:#2b3543}td{color:#d0d9e4}.empty{color:#9aa7b7}.btn{background:#b7f36a;border-color:#b7f36a;color:#111720}.btn:hover:not(:disabled){background:#c8ff80}.btn.lime{background:#b7f36a;border-color:#b7f36a;color:#111720}.btn.outline{color:#dbe4ee;border-color:#344153;background:transparent}.footer{border-color:#2b3543;color:#8e9bad}.toast{background:#202a36;border-left-color:#b7f36a}.cancelled p{color:#9aa7b7}
+.section-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.report-card{overflow:hidden}.report-results{display:grid;gap:12px;padding:14px}.report-section{border:1px solid #2b3543;background:#10161f;min-width:0}.report-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border-bottom:1px solid #2b3543}.report-section-head h3{font-size:11px;margin:0;overflow-wrap:anywhere}.report-text{margin:0;padding:15px;max-height:480px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:10px/1.65 var(--mono);color:#c6d3e2}.toolbar .search{max-width:100%}
+@media(max-width:720px){.nav{grid-template-columns:repeat(4,minmax(0,1fr))}.section-actions{align-items:flex-start;flex-direction:column;gap:8px}.report-text{font-size:9px;padding:11px}}
+.check-icon.step-pending{background:#2d1515!important;color:#ff6b6b!important;outline:1px solid #ff6b6b55}
+.check-icon.step-active{background:#2d2500!important;color:#ffd166!important;outline:1px solid #ffd16655}
+.check-icon.step-done{background:#1a2e1a!important;color:#b7f36a!important;outline:1px solid #b7f36a55}
+
+</style>
+</head>
+<body>
+<section class="gate" id="agreement-gate">
+  <div class="gate-shell" id="gate-shell">
+    <div class="gate-brand">
+      <div class="brand-top"><div class="mark">OG/</div><div class="brand-name">OLDGUYS<br>PC CHECKER<small>Version 2.0 · Windows</small></div></div>
+      <div class="brand-copy"><div class="kicker">01 / Authorization</div><h1>Know what<br>you’re sharing.</h1><p>Before a scan begins, review what our PC Checker collects, where the report is kept, and when it can be transmitted.</p></div>
+      <div class="brand-foot"><span>System review utility</span><span>Consent required</span></div>
+    </div>
+    <div class="gate-content" id="gate-content">
+      <div class="kicker">Agreement &amp; disclosure</div><h2>Review before you continue.</h2><p class="intro">By continuing, you authorize the scan described below. You can decline without running it.</p>
+      <div class="disclosure">
+        <h3>Information reviewed by the scanner</h3>
+        <p>Old Guys PC Checker may collect and log the following from this Windows computer:</p>
+        <ul><li><b>Current and historical process records</b>, including process names, IDs, paths and available command-line details.</li><li><b>Browser download history</b> from supported browser profiles.</li><li><b>Specified Windows registry entries</b> and their stored values.</li><li><b>Kernel driver information</b>, including active or inactive status where available.</li><li><b>Windows Defender records</b>, including detections, status events and selected security settings.</li><li><b>Windows security and elevation events</b>, timestamps and keyword matches.</li></ul>
+        <p>The report may contain computer and account names, Windows version, uptime, file paths, download records, event details and other activity-related metadata. It is not a complete copy of your personal files.</p>
+        <p><b>Storage and transmission:</b> the report is saved locally. If a Discord webhook is configured in Reports, the report may be sent to that webhook for staff review. Leave the webhook blank to keep the report local. A webhook is a secret and should only be supplied if you trust its recipient.</p>
+        <p><b>Remote access:</b> sending a report does not give staff remote desktop access or the ability to browse your files through this application. Review the report destination before scanning.</p>
+      </div>
+      <div class="note"><span>!</span><div><strong>Administrator access may be requested.</strong> Some Windows event logs and system details require elevated permissions. No scan starts until you accept and choose Run scan.</div></div>
+      <div class="username-section">
+        <label for="agreement-username">Your username</label>
+        <input id="agreement-username" name="agreement-username" type="text" autocomplete="username" maxlength="64" required placeholder="Enter your OldGuys username" aria-describedby="username-help">
+        <small id="username-help">Enter your username to continue. This field is required.</small>
+      </div>
+      <label class="ack"><input type="checkbox" id="agreement-check"><span>I have read this disclosure and authorize OldGuys to perform the described scan and review the report sent via Discord Webhook ONLY.</span></label>
+      <div class="gate-actions"><small>Declining will close the agreement flow. Your choice does not start a scan.</small><div class="actions"><button class="btn outline" id="cancel-agreement">Decline</button><button class="btn lime" id="accept-agreement" disabled>Accept &amp; continue&nbsp; ↗</button></div></div>
+    </div>
+    <div class="gate-content cancelled" id="cancelled-view" hidden><div class="kicker">Authorization declined</div><h2>No scan started.</h2><p>You declined the agreement. You can return to review it or close the application.</p><button class="btn outline" id="close-cancel">Return to agreement</button></div>
+  </div>
+</section>
+
+<section class="gate" id="pssqlite-gate" hidden>
+  <div class="gate-shell" id="pssqlite-shell">
+    <div class="gate-brand">
+      <div class="brand-top"><div class="mark">OG/</div><div class="brand-name">OLDGUYS<br>PC CHECKER<small>Version 2.0 &middot; Windows</small></div></div>
+      <div class="brand-copy">
+        <div class="kicker">02 / Module Required</div>
+        <h1>Browser history<br>needs access.</h1>
+        <p>Reading download records from Chrome, Edge, Firefox and other browsers requires a small PowerShell data-access module called PSSQLite.</p>
+      </div>
+      <div class="brand-foot"><span>Database reader</span><span>Optional install</span></div>
+    </div>
+    <div class="gate-content" id="pssqlite-ask">
+      <div class="kicker">PSSQLite Module</div>
+      <h2>Allow database reader?</h2>
+      <p class="intro">To include browser download history in your report, the checker needs PSSQLite &mdash; an open-source PowerShell module for reading the local history files browsers use to store download records.</p>
+      <div class="disclosure">
+        <h3>What is PSSQLite?</h3>
+        <p>PSSQLite is a lightweight, open-source module published on the PowerShell Gallery. It provides <b>read-only</b> access to local browser history files &mdash; the format used by Chrome, Edge, Brave, Vivaldi, Firefox and others to store local history.</p>
+        <ul>
+          <li><b>What it does:</b> allows the checker to query browser History files and extract download records for the report.</li>
+          <li><b>What it does not do:</b> it cannot write to any browser file, modify your files, or connect to the internet independently.</li>
+          <li><b>Where it installs:</b> current user only, under your personal PowerShell modules folder. No admin required.</li>
+          <li><b>Already installed?</b> If PSSQLite is already present on this machine the existing copy will be used and nothing is downloaded.</li>
+          <li><b>Declining:</b> browser download history will be skipped and this application will close.</li>
+        </ul>
+      </div>
+      <div class="note"><span>!</span><div><strong>One-time install.</strong> PSSQLite is approximately 50 KB and installs silently in the background when the scan starts.</div></div>
+      <div class="gate-actions">
+        <small>Declining skips browser history and closes the application.</small>
+        <div class="actions">
+          <button class="btn outline" id="pssqlite-no-btn">No, exit</button>
+          <button class="btn lime" id="pssqlite-yes-btn">Yes, allow &nbsp;&#x2197;</button>
+        </div>
+      </div>
+    </div>
+    <div class="gate-content cancelled" id="pssqlite-sorry" hidden>
+      <div class="kicker">Module declined</div>
+      <h2>Sorry to see you go.</h2>
+      <p>Browser download history will not be scanned. No changes have been made to your system.</p>
+      <p style="margin-top:18px;font-size:11px;color:var(--muted)">This window will close in <strong id="pssqlite-countdown" style="color:var(--ink)">10</strong> seconds.</p>
+    </div>
+  </div>
+</section>
+
+<section class="gate" id="webhook-gate" hidden>
+  <div class="gate-shell">
+    <div class="gate-brand">
+      <div class="brand-top"><div class="mark">OG/</div><div class="brand-name">OLDGUYS<br>PC CHECKER<small>Version 2.0 &middot; Windows</small></div></div>
+      <div class="brand-copy">
+        <div class="kicker">03 / Transmission Consent</div>
+        <h1>Report ready<br>to transmit.</h1>
+        <p>Choose whether your completed report is sent to the OldGuys staff team via Discord, or stored on this machine only.</p>
+      </div>
+      <div class="brand-foot"><span>Transmission consent</span><span>Your choice</span></div>
+    </div>
+    <div class="gate-content">
+      <div class="kicker">Discord Webhook Consent</div>
+      <h2>Send report via Discord?</h2>
+      <p class="intro">Your report can be transmitted over HTTPS to the OldGuys Discord webhook for staff review. Selecting No keeps all scan details local — only a brief privacy summary is sent.</p>
+      <div class="disclosure">
+        <h3>What each choice means</h3>
+        <p><b>Yes &mdash; send full report:</b> the complete system report is attached and uploaded to the OldGuys Discord webhook. Staff can review all collected records: processes, drivers, browser history, Defender events and flagged items.</p>
+        <p><b>No &mdash; local only:</b> the full report is saved on this machine only. Discord receives a single line reading <i>&ldquo;Remote reporting declined&rdquo;</i> alongside your username, date and time, and a total count of flagged items &mdash; no details.</p>
+        <ul>
+          <li><b>Encryption:</b> all data is sent over HTTPS. Discord handles transport security.</li>
+          <li><b>No remote access:</b> OldGuys staff receive the report file only. They cannot connect to or control this machine.</li>
+          <li><b>Local copy:</b> the full report is always saved to this machine regardless of your choice here.</li>
+          <li><b>Flag count only:</b> if you decline, only the number of flagged items is shared &mdash; not what they are.</li>
+        </ul>
+      </div>
+      <div class="note"><span>!</span><div><strong>Your data, your choice.</strong> A full report helps staff assist you faster. Declining keeps your scan private while still notifying staff that a scan took place.</div></div>
+      <div class="gate-actions">
+        <small>Full report always saved locally regardless of choice.</small>
+        <div class="actions">
+          <button class="btn outline" id="webhook-no-btn">No, local only</button>
+          <button class="btn lime" id="webhook-yes-btn">Yes, send report &nbsp;&#x2197;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="app" id="app-shell" hidden>
+  <aside class="rail">
+    <div class="rail-brand"><div class="mark">OG/</div><div><b>OLDGUYS PC CHECKER</b><small>WINDOWS UTILITY / 2.0</small></div></div>
+    <div><div class="nav-label">Workspace</div><nav class="nav"><button class="active" data-page="overview"><span class="num">01</span>Overview</button><button data-page="processes"><span class="num">02</span>Processes</button><button data-page="defender"><span class="num">03</span>Windows Defender</button><button data-page="drivers"><span class="num">04</span>Kernel Drivers</button></nav></div>
+    <div class="rail-bottom"><div class="label">Privacy note</div><p>You have the right to decline and stop at any part of the pc check process.</p></div>
+  </aside>
+  <main class="main">
+    <header class="topline"><div><div class="crumb">OldGuys / PC Checker 2.0</div><h1 id="page-title">Overview</h1></div><div class="top-right"><div class="status-pill"><span class="status-dot" id="connection-dot"></span><span id="connection-label">Scanner ready</span></div></div></header>
+
+    <section class="page active" id="page-overview">
+      <div class="hero"><div class="hero-card"><div><div class="kicker">System review / 01</div><h2>A clearer view of this PC.</h2><p>Run the local PowerShell checker to gather system and activity records into a reviewable report. Scan output and the generated report remain available for review.</p></div><div class="hero-action"><div class="hero-state"><span class="status-dot" id="overview-state-dot"></span><span id="overview-state">Ready to scan</span></div><button class="btn" id="hero-scan">Start system scan&nbsp; ↗</button><button class="btn outline" id="hero-resend" hidden>Resend report&nbsp; ↗</button></div></div></div>
+
+      <div class="content-grid"><div class="card progress-card"><div class="card-head"><div><h3>Scan progress</h3><p>Scan stages covered by the bundled checker</p></div><span class="badge" id="progress-badge">READY</span></div><div class="progress-summary"><div><strong id="progress-title">Ready to start</strong><p id="progress-description">Start a system scan to collect records for review.</p></div><div class="progress-track" role="progressbar" aria-label="Scan progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track"><span id="progress-fill"></span></div></div><div class="checks">
+        <div class="check"><div class="check-icon" id="step-icon-1">01</div><div><b>Running process inventory</b><small>Process metadata, paths, CPU, memory and available details</small></div><span class="mini-tag">SYSTEM</span></div>
+        <div class="check"><div class="check-icon" id="step-icon-2">02</div><div><b>Kernel driver scan</b><small>Driver state, link dates and recently-linked driver flagging</small></div><span class="mini-tag">SYSTEM</span></div>
+        <div class="check"><div class="check-icon" id="step-icon-3">03</div><div><b>Historical process events</b><small>Security event log records — Event 4688 process creation</small></div><span class="mini-tag">EVENT LOG</span></div>
+        <div class="check"><div class="check-icon" id="step-icon-4">04</div><div><b>Registry review</b><small>WinSock2 AutodialDLL and related registry values</small></div><span class="mini-tag">REGISTRY</span></div>
+        <div class="check"><div class="check-icon" id="step-icon-5">05</div><div><b>Browser download records</b><small>Supported browser profile download history via PSSQLite</small></div><span class="mini-tag">ACTIVITY</span></div>
+        <div class="check"><div class="check-icon" id="step-icon-6">06</div><div><b>Windows Security exclusions</b><small>Defender exclusion paths, extensions and processes</small></div><span class="mini-tag">SECURITY</span></div>
+        <div class="check"><div class="check-icon" id="step-icon-7">07</div><div><b>Admin elevation events</b><small>Administrative process creation and elevation type records</small></div><span class="mini-tag">EVENT LOG</span></div>
+        <div class="check"><div class="check-icon" id="step-icon-8">08</div><div><b>Security event review</b><small>Windows Defender operational event records</small></div><span class="mini-tag">SECURITY</span></div>
+        <div class="check"><div class="check-icon" id="step-icon-9">09</div><div><b>Windows Defender status</b><small>Defender disable events — Event 5001 detection</small></div><span class="mini-tag">SECURITY</span></div>
+      </div></div></div>
+      <div class="output"><div class="output-head"><b>LIVE SCANNER OUTPUT</b><span id="output-label">WAITING FOR SCAN</span></div><div class="output-body" id="scan-output"><span class="muted-line">Output from the PowerShell scanner will appear here after a scan starts.</span></div></div>
+    </section>
+
+    <section class="page" id="page-processes">
+      <div class="section-intro"><div><h2>Processes</h2><p>Current and historical process records parsed from a scan report.</p></div><div class="section-actions"><span class="micro">PROCESSES / 02</span><button class="btn lime" id="load-report-processes">Load report ↗</button></div></div>
+      <div class="card report-card"><div class="card-head"><div><h3>Process inventory</h3><p id="process-report-name">Load a PC Checker text report to view its process records.</p></div><span class="badge" id="process-count">0 RECORDS</span></div><div class="toolbar"><input class="search" id="process-search" type="search" placeholder="Filter process records…" aria-label="Filter process records"><span class="badge" id="process-filter-count">NO REPORT</span></div><div id="process-results" class="report-results"><div class="empty">No report loaded. Select a report to display current and historical processes.</div></div></div>
+    </section>
+
+    <section class="page" id="page-defender">
+      <div class="section-intro"><div><h2>Windows Defender</h2><p>Defender detections, protection status and related security records from the report.</p></div><div class="section-actions"><span class="micro">SECURITY / 03</span><button class="btn lime" id="load-report-defender">Load report ↗</button></div></div>
+      <div class="card report-card"><div class="card-head"><div><h3>Defender events</h3><p id="defender-report-name">Includes only records present in the selected report.</p></div><span class="badge" id="defender-count">0 EVENTS</span></div><div class="toolbar"><input class="search" id="defender-search" type="search" placeholder="Filter Defender events…" aria-label="Filter Defender events"><span class="badge" id="defender-filter-count">NO REPORT</span></div><div id="defender-results" class="report-results"><div class="empty">No report loaded. Select a report to display Windows Defender records.</div></div></div>
+    </section>
+
+    <section class="page" id="page-drivers">
+      <div class="section-intro"><div><h2>Kernel Drivers</h2><p>Driver inventory and states recorded by the system scan.</p></div><div class="section-actions"><span class="micro">DRIVERS / 04</span><button class="btn lime" id="load-report-drivers">Load report ↗</button></div></div>
+      <div class="card report-card"><div class="card-head"><div><h3>Scanned kernel drivers</h3><p id="drivers-report-name">Load a PC Checker text report to view its driver inventory.</p></div><span class="badge" id="drivers-count">0 DRIVERS</span></div><div class="toolbar"><input class="search" id="drivers-search" type="search" placeholder="Filter kernel drivers…" aria-label="Filter kernel drivers"><span class="badge" id="drivers-filter-count">NO REPORT</span></div><div id="drivers-results" class="report-results"><div class="empty">No report loaded. Select a report to display kernel driver records.</div></div></div>
+    </section>
+
+
+
+    <footer class="footer"><span>OldGuys PC Checker / Windows desktop utility</span><span>Local scanner · Consent required · v2.0</span></footer>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=id=>document.getElementById(id);
+const gateCheck=$('agreement-check'),usernameInput=$('agreement-username'),acceptButton=$('accept-agreement');
+let acceptedUsername='',webhookForSession='',webhookConsent=true,running=false,toastTimer=null,activityCount=1,latestState='ready';
+let hangTimer=null,hangPhase=0;
+function updateAgreementGate(){const hasUsername=Boolean(usernameInput.value.trim());acceptButton.disabled=!(hasUsername&&gateCheck.checked);usernameInput.setCustomValidity(hasUsername?'':'Please enter your username to continue.');}
+gateCheck.addEventListener('change',updateAgreementGate);
+usernameInput.addEventListener('input',updateAgreementGate);
+acceptButton.addEventListener('click',()=>{updateAgreementGate();if(!usernameInput.value.trim()){usernameInput.reportValidity();usernameInput.focus();return}if(!gateCheck.checked){gateCheck.focus();return}acceptedUsername=usernameInput.value.trim();$('agreement-gate').hidden=true;$('pssqlite-gate').hidden=false;addActivity('Consent accepted','Agreement reviewed; scan has not started.');});
+$('cancel-agreement').addEventListener('click',()=>{$('gate-content').hidden=true;$('cancelled-view').hidden=false;});
+$('close-cancel').addEventListener('click',()=>{$('cancelled-view').hidden=true;$('gate-content').hidden=false;});
+function pssqliteYes(){$('pssqlite-gate').hidden=true;$('webhook-gate').hidden=false;}
+function pssqliteNo(){
+  $('pssqlite-ask').hidden=true;$('pssqlite-sorry').hidden=false;
+  var secs=10;
+  var t=setInterval(function(){
+    secs--;var el=$('pssqlite-countdown');if(el)el.textContent=secs;
+    if(secs<=0){clearInterval(t);if(window.ogpc&&window.ogpc.exitTool){window.ogpc.exitTool();}else{window.close();}}
+  },1000);
+}
+$('pssqlite-yes-btn').addEventListener('click',pssqliteYes);
+$('pssqlite-no-btn').addEventListener('click',pssqliteNo);
+function webhookYes(){webhookConsent=true;$('webhook-gate').hidden=true;$('app-shell').hidden=false;showToast('Report transmission approved. Welcome, '+acceptedUsername+'. Start a scan when ready.');}
+function webhookNo(){webhookConsent=false;$('webhook-gate').hidden=true;$('app-shell').hidden=false;showToast('Local-only mode. A minimal summary will be sent to Discord. Welcome, '+acceptedUsername+'.');}
+$('webhook-yes-btn').addEventListener('click',webhookYes);
+$('webhook-no-btn').addEventListener('click',webhookNo);
+const pageTitles={overview:'Overview',processes:'Processes',defender:'Windows Defender',drivers:'Kernel Drivers'};
+function showPage(page){document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));document.querySelectorAll('.page').forEach(s=>s.classList.toggle('active',s.id==='page-'+page));$('page-title').textContent=pageTitles[page]||'Overview';}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function showToast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),3300)}
+function addActivity(title,detail){/* Session activity panel removed from the interface. */}
+// PS1 step number → UI step index (1-5)
+const psStepToUi={1:1,2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:-1,11:-1,12:-1,13:-1,14:-1};
+function updateStepColors(psStep){
+  const ui=psStepToUi[psStep]||0;
+  if(ui===-1){allStepsDone();return;}
+  if(!ui)return;
+  for(let i=1;i<=9;i++){
+    const ic=document.getElementById('step-icon-'+i);
+    if(!ic)continue;
+    ic.className='check-icon';
+    if(i<ui)ic.classList.add('step-done');
+    else if(i===ui)ic.classList.add('step-active');
+    else ic.classList.add('step-pending');
+  }
+}
+function clearStepColors(){for(let i=1;i<=9;i++){const ic=document.getElementById('step-icon-'+i);if(ic)ic.className='check-icon';}}
+function allStepsDone(){
+  for(let i=1;i<=9;i++){const ic=document.getElementById('step-icon-'+i);if(ic){ic.className='check-icon';ic.classList.add('step-done');}}
+  // Visible steps complete — switch to a 10-minute absolute backstop for hidden steps
+  if(hangPhase===1){hangPhase=2;startHangTimer(600000);}
+}
+
+// ---- Hang / error detection ----
+function onHangDetected(){
+  if(!hangTimer)return;
+  hangTimer=null;hangPhase=0;
+  if(!running)return;
+  running=false;
+  const b=$('hero-scan');
+  if(b){b.disabled=false;b.textContent=b.getAttribute('data-old')||'Start system scan \u2197';}
+  setScanState('failed');
+  const el=$('scan-output');
+  if(el){
+    ['> ERROR: An error has occurred or the scanner stopped responding.',
+     '> Check the OG PC Checker error log on your Desktop for details.']
+    .forEach(function(msg){
+      const d=document.createElement('div');
+      d.textContent=msg;d.style.color='#ff6b6b';el.appendChild(d);
+    });
+    el.scrollTop=el.scrollHeight;
+  }
+  showToast('An error has occurred \u2014 check the error log on your Desktop.');
+}
+function startHangTimer(ms){clearHangTimer();hangTimer=setTimeout(onHangDetected,ms||60000);}
+function resetHangTimer(){if(hangTimer!==null&&hangPhase===1)startHangTimer(60000);}
+function clearHangTimer(){if(hangTimer!==null){clearTimeout(hangTimer);hangTimer=null;}}
+function appendOutput(line){
+  resetHangTimer();
+  const sm=line.match(/\[(\d+)\/\d+\]/);if(sm)updateStepColors(parseInt(sm[1],10));
+  const el=$('scan-output');if(!el)return;
+  if(el.querySelector('.muted-line'))el.innerHTML='';
+  const span=document.createElement('div');span.textContent=line;el.append(span);
+  while(el.children.length>180)el.removeChild(el.firstChild);el.scrollTop=el.scrollHeight;
+}
+async function resendReport(){
+  if(!window.ogpc||!window.ogpc.resendReport){showToast('Resend unavailable in this environment.');return;}
+  const btn=$('hero-resend');
+  if(btn){btn.disabled=true;btn.dataset.oldText=btn.textContent;btn.textContent='Sending\u2026';}
+  showToast('Resending report to Discord\u2026');
+  try{
+    const result=await window.ogpc.resendReport(webhookForSession);
+    showToast(result&&result.ok?'Report resent successfully.':(result&&result.message)||'Resend failed.');
+  }catch(e){showToast('Resend error: '+e.message);}
+  finally{if(btn){btn.disabled=false;btn.textContent=btn.dataset.oldText||'Resend report \u2197';}}
+}
+function setScanState(state){latestState=state;const resendBtn=$('hero-resend');if(resendBtn)resendBtn.hidden=state!=='completed';if(state==='running')updateStepColors(1);else if(state==='completed')allStepsDone();else if(state==='ready')clearStepColors();const runningNow=state==='running';$('connection-label').textContent=runningNow?'Scan running':state==='completed'?'Scan completed':state==='failed'?'Scan failed':'Scanner ready';$('connection-dot').classList.toggle('live',runningNow);$('overview-state').textContent=runningNow?'Scan in progress':state==='completed'?'Scan completed':state==='failed'?'Scan needs attention':'Ready to scan';$('overview-state-dot').classList.toggle('live',runningNow);$('progress-title').textContent=runningNow?'Scan in progress':state==='completed'?'Scan completed':state==='failed'?'Scan needs attention':'Ready to start';$('progress-description').textContent=runningNow?'The PowerShell scanner is running. Keep the application open.':state==='completed'?'The scanner process has finished. Report sections can now be reviewed in the tabs.':state==='failed'?'The scan did not finish successfully. Check the live scanner output.':'Start a system scan to collect records for review.';$('progress-badge').textContent=runningNow?'RUNNING':state==='completed'?'COMPLETE':state==='failed'?'FAILED':'READY';const fill=$('progress-fill'),track=$('progress-track');fill.classList.toggle('indeterminate',runningNow);fill.style.width=state==='completed'?'100%':runningNow?'35%':'0%';if(runningNow){track.removeAttribute('aria-valuenow');track.setAttribute('aria-valuetext','Scan in progress')}else{track.setAttribute('aria-valuenow',state==='completed'?'100':'0');track.setAttribute('aria-valuetext',state==='completed'?'Scan completed':state==='failed'?'Scan failed':'Ready to start')}$('output-label').textContent=runningNow?'PROCESS ACTIVE':state==='completed'?'PROCESS COMPLETE':state==='failed'?'PROCESS FAILED':'WAITING FOR SCAN';}
+async function runScan(){if(running)return;if(!window.ogpc){showToast('Desktop scanner bridge is unavailable. Open this project through the Electron desktop app.');return}running=true;const b=$('hero-scan');if(b){b.disabled=true;b.dataset.oldText=b.textContent;b.textContent='Scan running\u2026'}appendOutput('> Starting PC Checker 2.0\u2026');setScanState('running');hangPhase=1;startHangTimer(60000);try{const result=await window.ogpc.startScan(webhookForSession,webhookConsent);clearHangTimer();hangPhase=0;if(result&&result.ok){showToast('Scan completed. Loading report records\u2026');setScanState('completed');await loadReport()}else{const msg=(result&&result.message)||'The scan did not complete.';appendOutput('> ERROR: '+msg);appendOutput('> Check the OG PC Checker error log on your Desktop for details.');showToast('An error has occurred \u2014 check the error log on your Desktop.');setScanState('failed')}}catch(e){clearHangTimer();hangPhase=0;const msg='Scan error: '+e.message;appendOutput('> ERROR: '+msg);appendOutput('> Check the OG PC Checker error log on your Desktop for details.');showToast('An error has occurred \u2014 check the error log on your Desktop.');setScanState('failed')}finally{running=false;if(b){b.disabled=false;b.textContent=b.dataset.oldText||'Start system scan \u2197'}}}
+$('hero-scan').addEventListener('click',runScan);
+$('hero-resend').addEventListener('click',resendReport);
+let loadedReport = null;
+const reportViews = {
+  processes: { sections: ['CURRENTLY RUNNING PROCESSES', 'HISTORICAL PROCESSES'], results: 'process-results', count: 'process-count', filterCount: 'process-filter-count', search: 'process-search', name: 'process-report-name', noun: 'RECORDS' },
+  defender: { sections: ['DEFENDER MALWARE DETECTIONS', 'WINDOWS DEFENDER STATUS', 'WINDOWS SECURITY EXCLUSIONS', 'ADMIN ELEVATION EVENTS'], results: 'defender-results', count: 'defender-count', filterCount: 'defender-filter-count', search: 'defender-search', name: 'defender-report-name', noun: 'EVENTS' },
+  drivers: { sections: ['KERNEL DRIVERS'], results: 'drivers-results', count: 'drivers-count', filterCount: 'drivers-filter-count', search: 'drivers-search', name: 'drivers-report-name', noun: 'DRIVERS' }
+};
+function parseReportSections(text) {
+  const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/);
+  const sections = [];
+  for (let i = 0; i < lines.length - 2; i++) {
+    if (!/^={20,}\s*$/.test(lines[i])) continue;
+    const title = (lines[i + 1] || '').trim();
+    if (!title || !/^={20,}\s*$/.test(lines[i + 2] || '')) continue;
+    let end = i + 3;
+    while (end < lines.length && !/^={20,}\s*$/.test(lines[end])) end++;
+    sections.push({ title, lines: lines.slice(i + 3, end) });
+    i = end - 1;
+  }
+  return sections;
+}
+function sectionMatches(section, terms) { const t = section.title.toUpperCase(); return terms.some(term => t.includes(term)); }
+function renderReportView(key) {
+  const cfg = reportViews[key], root = $(cfg.results);
+  if (!loadedReport) { root.innerHTML = '<div class="empty">No report loaded. Select a PC Checker text report to display records.</div>'; $(cfg.count).textContent = '0 ' + cfg.noun; $(cfg.filterCount).textContent = 'NO REPORT'; return; }
+  const query = $(cfg.search).value.trim().toLowerCase();
+  const sections = loadedReport.sections.filter(sec => sectionMatches(sec, cfg.sections));
+  root.innerHTML = '';
+  let totalLines = 0, shownLines = 0;
+  if (!sections.length) { root.innerHTML = '<div class="empty">The selected report does not contain the expected section(s) for this view.</div>'; $(cfg.count).textContent = '0 ' + cfg.noun; $(cfg.filterCount).textContent = '0 MATCHES'; return; }
+  for (const sec of sections) {
+    const allLines = sec.lines.filter(line => line.trim() && !/^[-=]{8,}\s*$/.test(line));
+    totalLines += allLines.length;
+    const matching = query ? allLines.filter(line => line.toLowerCase().includes(query) || sec.title.toLowerCase().includes(query)) : allLines;
+    if (query && !matching.length) continue;
+    shownLines += matching.length;
+    const card = document.createElement('section'); card.className = 'report-section';
+    const head = document.createElement('div'); head.className = 'report-section-head';
+    const title = document.createElement('h3'); title.textContent = sec.title;
+    const badge = document.createElement('span'); badge.className = 'badge'; badge.textContent = matching.length + ' LINES';
+    head.append(title, badge); card.append(head);
+    const pre = document.createElement('pre'); pre.className = 'report-text'; pre.textContent = matching.join('\n') || 'No matching records.'; card.append(pre); root.append(card);
+  }
+  if (!root.children.length) root.innerHTML = '<div class="empty">No records match your filter.</div>';
+  $(cfg.count).textContent = totalLines + ' ' + cfg.noun;
+  $(cfg.filterCount).textContent = query ? shownLines + ' MATCHES' : 'ALL RECORDS';
+  $(cfg.name).textContent = loadedReport.name;
+}
+function renderAllReportViews() { Object.keys(reportViews).forEach(renderReportView); }
+async function loadReport() {
+  if (!window.ogpc || !window.ogpc.loadReport) { showToast('Report loading is available in the Windows desktop app.'); return; }
+  const result = await window.ogpc.loadReport();
+  if (!result || !result.ok) { if (result && result.message && result.message !== 'No report selected.') showToast(result.message); return; }
+  loadedReport = { name: result.name || 'PC Checker report', text: result.content || '', sections: parseReportSections(result.content || '') };
+  renderAllReportViews(); showToast('Loaded report: ' + loadedReport.name);
+}
+['load-report-processes','load-report-defender','load-report-drivers'].forEach(id => $(id).addEventListener('click', loadReport));
+Object.values(reportViews).forEach(cfg => $(cfg.search).addEventListener('input', () => {
+  const key = Object.keys(reportViews).find(k => reportViews[k] === cfg); renderReportView(key);
+}));
+if(window.ogpc){window.ogpc.onScanOutput(line=>appendOutput(line));window.ogpc.onScanState(state=>setScanState(state))}
+</script>
+</body>
+</html>
