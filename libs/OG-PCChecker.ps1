@@ -55,7 +55,7 @@ function Write-ErrorLog {
 # ===========================================================================
 #  CONFIGURATION
 # ===========================================================================
-if (-not $WebhookUrl) { $WebhookUrl = "https://discord.com/api/webhooks/1563822123498086450/KTsFtjLzNxmLk6B7RXMvKgMUc09-9dU3n4PGP18FwSeMs3Iht_KJTCiWowNT4B0iRtrJ" }
+if (-not $WebhookUrl) { $WebhookUrl = "https://discord.com/api/webhooks/1563825123499188235/ig49xCdClEkj4_zJ_Kanspqw8EfjG_HALq_BCyanrcCOXe6caWFimykFtUhZdHlg5-JJ" }
 $MaxHistory = 1000
 $AppRoot    = Split-Path $PSScriptRoot -Parent
 $ReportsDir = Join-Path $AppRoot "Reports"
