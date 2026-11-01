@@ -354,13 +354,20 @@ try {
 
         if (-not (Get-PackageProvider -Name NuGet -ErrorAction SilentlyContinue)) {
             Write-Host "    Installing NuGet provider..." -ForegroundColor DarkGray
-            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Scope CurrentUser -ErrorAction Stop | Out-Null
+            Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 `
+                -Force -Scope CurrentUser -Confirm:$false -ErrorAction Stop | Out-Null
         }
 
         Write-Host "    Installing PSSQLite (timeout 60s)..." -ForegroundColor DarkGray
         $installJob = Start-Job -ScriptBlock {
-            Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted -ErrorAction SilentlyContinue
-            Install-Module -Name PSSQLite -Scope CurrentUser -Force -AllowClobber -SkipPublisherCheck -ErrorAction Stop
+            # Suppress ALL confirmation prompts in this fresh session -
+            # the user already agreed to this installation in the UI gate.
+            $ConfirmPreference   = 'None'
+            $ErrorActionPreference = 'SilentlyContinue'
+            Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+            $ErrorActionPreference = 'Stop'
+            Install-Module -Name PSSQLite -Scope CurrentUser `
+                -Force -AllowClobber -SkipPublisherCheck -Confirm:$false
         }
 
         $done = Wait-Job -Job $installJob -Timeout 60
